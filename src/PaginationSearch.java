@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 
-public class WebtableSorting {
+public class PaginationSearch {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -43,9 +43,11 @@ public class WebtableSorting {
 		
 		
 		//**************************************************
-		
+		List<String> price;
+		do{
 		//scan the name column with get text  -> Beans -> print the price of the rice 
-List<String> price=WEL.stream().filter(s->s.getText().contains("Beans")).map(s->getPriceVeggie(s)).collect(Collectors.toList());
+			List<WebElement> copyWEL=driver.findElements(By.xpath("//tr/td[1]"));
+price=copyWEL.stream().filter(s->s.getText().contains("Rice")).map(s->getPriceVeggie(s)).collect(Collectors.toList());
 		price.forEach(a->System.out.println(a));
 		 
 		
@@ -54,16 +56,20 @@ List<String> price=WEL.stream().filter(s->s.getText().contains("Beans")).map(s->
 		
 		////scan the name column with get text  -> Beans -> print the price of the rice [which is present in different pages]
 		
-			if (price.size()<0)
+			if (price.size()<1)
 			{
 				driver.findElement(By.cssSelector("[aria-label='Next']")).click();				
 			}
-	}
-
+		}
+		while(price.size()<1);
+		
+		}
+	
 	private static String getPriceVeggie(WebElement s) {
 		// TODO Auto-generated method stub
 		 String pricevalue=s.findElement(By.xpath("following-sibling :: td[1]")).getText();
 		return pricevalue;
+
 	}
 
 }
